@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://addons/bifractal-water-transition-shader/Materials/SHD_PostProcess_WaterTransitionPass.gdshader" type="Shader" id=1]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/water_level = 0.0
+shader_param/camera_near = null
+shader_param/camera_position = null
+shader_param/camera_direction_vector = null

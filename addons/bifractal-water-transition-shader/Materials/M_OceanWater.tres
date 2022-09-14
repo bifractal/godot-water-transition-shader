@@ -1,0 +1,32 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[ext_resource path="res://addons/bifractal-water-transition-shader/materials/SHD_OceanWater.gdshader" type="Shader" id=1]
+
+[sub_resource type="OpenSimplexNoise" id=6]
+octaves = 6
+period = 24.0
+
+[sub_resource type="NoiseTexture" id=7]
+width = 1024
+height = 1
+seamless = true
+as_normalmap = true
+noise = SubResource( 6 )
+
+[resource]
+render_priority = -128
+shader = ExtResource( 1 )
+shader_param/dronePosition = null
+shader_param/roughness = 0.03
+shader_param/metallic = 0.5
+shader_param/alphaEdgeFadeIntensity = 0.15
+shader_param/underWaterDepthExponent = 0.5
+shader_param/underWaterColor = Color( 0, 0.25, 0.25, 1 )
+shader_param/uvScale = 20.0
+shader_param/waterNormalScaleUV = 2.0
+shader_param/waterNormalTimeScale1 = 0.005
+shader_param/waterNormalTimeScale2 = 0.0035
+shader_param/foamFadeSize = 0.15
+shader_param/foamColor = Color( 0.18, 0.18, 0.18, 1 )
+shader_param/foamNormalIntensity = 0.4
+shader_param/waterNormal = SubResource( 7 )

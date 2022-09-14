@@ -9,10 +9,10 @@ uniform vec3 dronePosition;
 // General Settings
 uniform float roughness 				: hint_range(0.0, 1.0)		= 0.03f;
 uniform float metallic 					: hint_range(0.0, 1.0)		= 0.5f;
-uniform float alphaEdgeFadeIntensity 	: hint_range(0.0, 1.0)		= 0.35f;
-uniform float underWaterDepthExponent	: hint_range(0.0, 8.0)		= 2.0f;
-uniform vec4 underWaterColor			: hint_color 				= vec4(1.0f);
-uniform float uvScale 					: hint_range(0.0, 1000.0)	= 10.0f;
+uniform float alphaEdgeFadeIntensity 	: hint_range(0.0, 1.0)		= 0.15f;
+uniform float underWaterDepthExponent	: hint_range(0.0, 8.0)		= 0.5f;
+uniform vec4 underWaterColor			: hint_color 				= vec4(0.0f, 0.25f, 0.25f, 1.0f);
+uniform float uvScale 					: hint_range(0.0, 1000.0)	= 20.0f;
 
 // Water Normal
 uniform sampler2D waterNormal;
@@ -22,9 +22,9 @@ uniform float waterNormalTimeScale2  	: hint_range(0.0, 1.0)		= 0.0035f;
 
 // Foam
 uniform sampler2D foamTexture;
-uniform float foamFadeSize 				: hint_range(0.0, 1.0) 		= 0.35f;
-uniform vec4 foamColor 					: hint_color 				= vec4(0.37f, 0.37f, 0.37f, 1.0f);
-uniform float foamNormalIntensity 		: hint_range(0.0, 1.0) 		= 0.5f;
+uniform float foamFadeSize 				: hint_range(0.0, 1.0) 		= 0.15f;
+uniform vec4 foamColor 					: hint_color 				= vec4(0.18f, 0.18f, 0.18f, 1.0f);
+uniform float foamNormalIntensity 		: hint_range(0.0, 1.0) 		= 0.4f;
 
 // Vertex Stuff
 varying vec2 uv;
@@ -48,8 +48,7 @@ float calc_drone_wind_area(mat4 invCameraMatrix, vec3 vertexPosition, float size
 void vertex()
 {
 	mat4 mvp = PROJECTION_MATRIX * MODELVIEW_MATRIX;
-	//POSITION = mvp * vec4(VERTEX, 1.0);
-	
+
 	uv = UV * uvScale;
 	position = MODELVIEW_MATRIX * vec4(VERTEX, 1.0f);
 	mvMatrix = MODELVIEW_MATRIX;
@@ -97,9 +96,6 @@ void fragment()
 	vec3 foamTextureMix = foamColor.rgb * (foamTex.rgb);
 	vec3 foamFinalColor = foamTextureMix * foamRange * foamWaves;
 	
-	//float droneWindArea = calc_drone_wind_area(INV_CAMERA_MATRIX, VERTEX, 0.2f);
-	//float droneWindFX = cos(droneWindArea * 10.0f + TIME * 5.0f) * droneWindArea;
-	
 	// General
 	ALPHA = alphaEdgeFade;
 	ROUGHNESS = roughness;
@@ -113,9 +109,7 @@ void fragment()
 	// Normal
 	normalTexture.x += (foamWaves * foamNormalIntensity) * maxFoamNormalDist;
 	NORMALMAP = mix(normalTexture.rgb, normalTexture2.rgb, 0.5f);
-	//NORMALMAP.x += droneWindFX * -0.06f;
-	//NORMALMAP.y += droneWindFX * 0.04f;
-	
+
 	// Albedo
 	ALBEDO = waterColor + (underWaterColor.rgb * (1.0f - dist));
 	
